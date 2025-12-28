@@ -32,24 +32,19 @@ Sub BuildMortgageVsHeloc_Final()
         .Range("A4").Value = "Mortgage Term (Years)": .Range("B4").Value = 30
         .Range("A5").Value = "Start Date of Loan": .Range("B5").Value = DateSerial(2024, 1, 1)
         .Range("A6").Value = "Mortgage Payment Day": .Range("B6").Value = 1
-        
         .Range("A8").Value = "HELOC Strategy Inputs": .Range("A8").Font.Bold = True
         .Range("A9").Value = "HELOC Interest Rate": .Range("B9").Value = 0.07
         .Range("A10").Value = "Weekly HELOC Payment": .Range("B10").Value = 2000
         .Range("A11").Value = "Bi-Weekly HELOC Payment": .Range("B11").Value = 4000
         .Range("A12").Value = "HELOC First Pmt Date (Weekly)": .Range("B12").Value = DateSerial(2024, 1, 5)
         .Range("A13").Value = "HELOC First Pmt Date (Bi-Weekly)": .Range("B13").Value = DateSerial(2024, 1, 12)
-        .Range("B14").Value = "" 
-        
         .Range("A15").Value = "Calculated Fields": .Range("A15").Font.Bold = True
         .Range("A16").Value = "Mortgage Monthly Payment"
         .Range("B16").Formula = "=PMT(B3/12, B4*12, -B2)"
-        
         .Range("A19").Value = "Other Details": .Range("A19").Font.Bold = True
         .Range("A20").Value = "Credit Card Charge for Draw Payments"
         .Range("B20").Value = "y"
         .Range("D20").Value = "Enter a y if you want all possible bills to be paid with Credit card..."
-        
         .Range("A1:D18").Borders.LineStyle = xlContinuous
         .Columns("A:D").AutoFit
         .Range("B2, B10, B11, B16").Style = "Currency"
@@ -60,85 +55,102 @@ Sub BuildMortgageVsHeloc_Final()
     ' SHEET 2: BILLS
     ' ==========================================
     With wsBills
-        ' Update 10 & 11: Header updates with carriage returns
+        ' Header Text
         .Range("A1").Value = "Bill Description"
         .Range("B1").Value = "Bill Amount"
         .Range("C1").Value = "Week/Month/Annual" & vbLf & "(Enter: w,m,a)"
         .Range("D1").Value = "Due Date Month" & vbLf & "(Annual Bills Only)"
         .Range("E1").Value = "Due Date Day" & vbLf & "(Annual/Monthly Bills Only)"
         .Range("F1").Value = "Can be paid on CC" & vbLf & "(Enter: y,n)"
+        .Range("H1").Value = "Current Gallon Cost"
+        .Range("I1").Value = "Fuel Tank Gallons"
+        .Range("J1").Value = "Tanks Per Week"
+        .Range("K1").Value = "Notes/Comments"
+        .Range("A1:K1").Font.Bold = True
+        .Range("A1:K1").Borders.LineStyle = xlContinuous
         
-        .Range("H1").Value = "Current Gallon Cost": .Range("H1").Font.Bold = True
-        .Range("I1").Value = "Fuel Tank Gallons": .Range("I1").Font.Bold = True
-        .Range("J1").Value = "Tanks Per Week": .Range("J1").Font.Bold = True
-        .Range("K1").Value = "notes/comments": .Range("K1").Font.Bold = True
+        ' Background Update: Clear F1:J1, Black for F2:J2
+        .Range("F1:J1").Interior.ColorIndex = xlNone
+        .Range("F2:J2").Interior.Color = vbBlack
+
+        ' Column Alignment
+        .Columns("C:J").HorizontalAlignment = xlCenter
         
-        ' Update 5: Text in K2
-        .Range("K2").Value = "Charge all bills you can on credit card. Earn points/cash back for all charges. " & _
-                             "Key, pay off Credit Card each month prior to being charged interest on your card."
-        
-        ' Update 4: Borders A2:E2 and Red/White formatting
+        ' Row 2 logic
         .Range("A2").Value = "Credit Card Payment Draw"
-        .Range("B2").Formula = "=SUMIF(F4:F100, ""y"", B4:B100)"
+        .Range("B2").Formula = "=SUMIFS(B10:B100, F10:F100, ""y"", C10:C100, ""<>a"")"
+        .Range("C2").Value = "m"
+        .Range("E2").Interior.Color = RGB(220, 255, 220)
         .Range("A2:B2").Interior.Color = vbRed
         .Range("A2:B2").Font.Color = vbWhite
         .Range("A2:E2").Borders.LineStyle = xlContinuous
         
-        ' Row 3 Dots
-        .Range("A3:F3").Value = "." 
+        ' Row 3 instruction area
+        .Range("A3").Value = "For Bill amount, it will calculate based on your entries of data into Columns H, I, J ONLY"
+        .Range("A3:K3").Interior.Color = RGB(200, 200, 200)
         
-        ' Vehicles (Updates 3, 6, 7, 8, 9)
+        ' Vehicles section
         .Range("A4:A7").Value = Application.Transpose(Array("vehicle 1", "vehicle 2", "vehicle 3", "vehicle 4"))
         .Range("B4:B7").Formula = "=H4*I4*J4"
-        .Range("C4:C7").Value = "w" ' Update 9
-        .Range("H4:H7").Value = "Current Gallon Cost" ' Update 6
-        .Range("I4:I7").Value = "Enter Fuel Tank Size" ' Update 7
-        .Range("J4:J7").Value = "How many takes a Week" ' Update 8
+        .Range("C4:C7").Value = "w"
         
-        ' Update 1: Borders and Accounting for H4:J7
-        With .Range("H4:J7")
-            .Borders.LineStyle = xlContinuous
-            .NumberFormat = "_($* #,##0.00_);_($* (#,##0.00);_($* ""-""??_);_(@_)" ' Accounting format
-            .HorizontalAlignment = xlCenter ' Update 2
-        End With
+        ' Borders for row 4
+        .Range("A4:J4").Borders.LineStyle = xlContinuous
         
-        ' Update 3: Borders A4:C7
+        ' Blackout and Light Green highlights
+        .Range("D4:G7").Interior.Color = vbBlack
+        .Range("F4:F7").Interior.ColorIndex = xlNone
+        .Range("H4:J7").Interior.Color = RGB(220, 255, 220)
+        
+        .Range("H4:J7").Borders.LineStyle = xlContinuous
         .Range("A4:C7").Borders.LineStyle = xlContinuous
         
-        ' Update 12: Column B Accounting format
-        .Columns("B").NumberFormat = "_($* #,##0.00_);_($* (#,##0.00);_($* ""-""??_);_(@_)"
-        
-        ' Instructions
+        ' Row 8 Yellow background
         .Range("A8").Value = "If more vehicles, right click row, ""Insert"""
         .Range("A8").Font.Italic = True
-        .Range("A8:K8").Interior.Color = RGB(220, 255, 220)
+        .Range("A8:K8").Interior.Color = vbYellow
         
-        ' Row 9 Dot Separator
-        .Range("A9:F9").Value = "."
+        ' Row 9 Separator
+        .Range("A9").Value = "Start Entering Bills below"
+        .Range("A9:K9").Interior.Color = RGB(200, 200, 200)
         
-        .Range("A1:F1").Font.Bold = True
+        ' Bill Entry Area (Light Green)
+        .Range("C10:F60").Interior.Color = RGB(220, 255, 220)
+        .Range("A10:K60").Borders.LineStyle = xlContinuous
+        
+        ' Patterns
+        With .Range("H10:J60").Interior
+            .Pattern = xlPatternUpward
+            .PatternColorIndex = xlAutomatic
+        End With
+        
+        ' Cell K2 Note
+        .Range("K2").Value = "Charge all your bills on your credit card. Earn points/cash back for your all charges. Key, pay off Credit Card each month prior to being charged interest on your statement."
+        
+        ' Column Formatting
+        .Columns("I:J").NumberFormat = "General"
+        .Columns("B").NumberFormat = "_($* #,##0.00_);_($* (#,##0.00);_($* ""-""??_);_(@_)"
+        .Range("H4:H7").NumberFormat = "_($* #,##0.00_);_($* (#,##0.00);_($* ""-""??_);_(@_)"
+        
+        ' AutoSize
         .Range("A1:F1").WrapText = True
         .Columns("A:K").AutoFit
-        .Columns("K").ColumnWidth = 50 ' Give the notes some room
+        .Columns("K").ColumnWidth = 50
     End With
 
     ' ==========================================
-    ' SHEET 3: SIDE BY SIDE
+    ' SHEET 3: SIDE-BY-SIDE (RESTORED BASELINE)
     ' ==========================================
     With wsSide
         lastRow = 11000
-        
-        ' Summaries
         .Range("B1").Value = "Date Loan Paid Off"
         .Range("B2").Value = "Total Months to Payoff"
         .Range("B3").Formula = "=IFERROR(INDEX(A8:A" & lastRow & ", MATCH(0, F8:F" & lastRow & ", 0)), ""Not Paid"")"
         .Range("B2").Formula = "=IF(ISNUMBER(B3), DATEDIF('Loan Info Inputs'!$B$5, B3, ""m""), 0)"
-        
         .Range("K1").Value = "Date Loan Paid Off"
         .Range("K2").Value = "Total Months to Payoff"
         .Range("K3").Formula = "=IFERROR(INDEX(A8:A" & lastRow & ", MATCH(0, K8:K" & lastRow & ", 0)), ""Not Paid"")"
         .Range("K2").Formula = "=IF(ISNUMBER(K3), DATEDIF('Loan Info Inputs'!$B$5, K3, ""m""), 0)"
-        
         .Range("L1").Value = "Net HELOC Principal Paid"
         .Range("L2").Formula = "=(SUM(L8:L" & lastRow & ") - P2)"
         
@@ -203,19 +215,17 @@ Sub BuildMortgageVsHeloc_Final()
         .Range("N8").Formula = "=MAX(0, N7 + M8 - O8)"
         .Range("L8").Formula = "=MAX(0, O8 - (N7 + M8))"
         .Range("K8").Formula = "=MAX(0, K7 + P8 - L8)"
-        
         .Range("R8").Formula = "=R7 + O8": .Range("S8").Formula = "=S7 + L8"
         .Range("T8").Formula = "=T7 + MIN(O8, N7 + M8)": .Range("U8").Formula = "=U7 + P8"
         
         .Range("A8:U8").AutoFill Destination:=.Range("A8:U" & lastRow)
-        
         .Range("A:A").NumberFormat = "mm/dd/yyyy"
         .Range("B:F, G:I, K:P, R:U").Style = "Currency"
         .Range("Q:Q").WrapText = True: .Range("Q:Q").VerticalAlignment = xlVAlignCenter
         .Columns("A:U").AutoFit: .Columns("Q").ColumnWidth = 35
-        
         .Activate: ActiveWindow.SplitColumn = 1: ActiveWindow.SplitRow = 6: ActiveWindow.FreezePanes = True
     End With
     
-    MsgBox "Bills sheet formatting and vehicle sections updated!", vbInformation
+    MsgBox "Bills update: F1:J1 clear, F2:J2 black!", vbInformation
 End Sub
+
