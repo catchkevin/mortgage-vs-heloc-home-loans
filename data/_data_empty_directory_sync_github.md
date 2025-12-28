@@ -1,4 +1,4 @@
-﻿For datasets, sample data, or database files.
+﻿For database files, datasets, excel files, sample data.
 
 # Created Empty Directory for Git Sync
 
