@@ -10,9 +10,9 @@ RGB(220, 255, 220)
 
 Next:
 sheet "side-by-side"
-cell b1, k1, l1, l2 bold
+cell b1, k1, l1, l2, bold the cell for text
 cell l1 update to "HELOC Principal Paid"
-row 1 center bottom all text
+row 1, lets center the text in the cell, and align to the bottom of the cell
 
 
 Next:
@@ -68,7 +68,7 @@ updates for the excel Sheet "Bills"
 11. cell K1, change text to "Notes/Comments"
 13. cells b1:k1, center all text
 
-##12/28/2025 8:20am
+## 12/28/2025 8:20am
 for excel sheet, "Bills"
 2. Can you auto size all the columns to the width of text in cells
 3. cells h10:j60, format cells, fill with pattern style "reverse diagonal stripe"
